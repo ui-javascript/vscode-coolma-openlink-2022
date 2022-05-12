@@ -6,14 +6,18 @@ import VueCompositionApi, {
 import { watchDebounced, watchThrottled } from '@vueuse/core'
 import "./style.less";
 import unifiedParser from "./utils/unifiedParserUtil";
+import { after } from "lodash";
 
 const App = {
   template: `
     <div>
 
+    <!--
     <nav>
       <button role="button" @click="writeFile">更新MD文件 + 关闭Tab页面</button>
     </nav>
+    -->
+
 
     <main class="container-fluid">
   
@@ -37,29 +41,32 @@ const App = {
 
         console.log(String(res));
         after.value = String(res);
+
     }, { 
       debounce: 200, 
       maxWait: 1000
     });
 
     onMounted(() => {
-      before.value = window.$CONTENT
+      if (window.$VUE) {
+        window.$VUE.$children[0].before = window.$CONTENT
+      }
     })
 
-    const writeFile = () => {
-      window.parent.postMessage({
-        cmd: 'writeFile',
-        data: {
-            code: before.value,    
-            mdPath: window.$MDPATH
-        }
-      }, '*')
-    }
+    // const writeFile = () => {
+    //   window.parent.postMessage({
+    //     cmd: 'writeFile',
+    //     data: {
+    //         code: before.value,    
+    //         mdPath: window.$MDPATH
+    //     }
+    //   }, '*')
+    // }
 
     return {
       before,
       after,
-      writeFile
+      // writeFile
     };
   },
 };
@@ -86,11 +93,13 @@ const init = async (event) => {
 
       
       if (window.$VUE) {
-        window.$VUE.before.value = window.$CONTENT
+        // window.$VUE.$children[0].before.value = window.$CONTENT
 
-        const res = await unifiedParser(window.$CONTENT);
+        // const res = await unifiedParser(window.$CONTENT);
         // console.log(String(res));
-        window.$VUE.after.value = String(res);
+        // console.log(window.$VUE.$children[0].after)
+        window.$VUE.$children[0].before = window.$CONTENT;
+        // after.value = String(res)
       }
 
     }
