@@ -96,7 +96,7 @@ const init = async (event) => {
   }
 };
 
-// window.$VUE = new Vue({
-//   el: "#app",
-//   render: (h) => h(App),
-// });
+window.$VUE = new Vue({
+  el: "#app",
+  render: (h) => h(App),
+});
