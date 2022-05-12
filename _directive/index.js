@@ -105,6 +105,12 @@ hello @nice test *em* @nice ssss *em* sss @nice xxx
 
 const App = {
   template: `
+    <div>
+
+    <nav>
+      <button role="button" @click="writeFile">更新文件</button>
+    </nav>
+
     <main class="container-fluid">
   
     <div class="grid">
@@ -115,6 +121,7 @@ const App = {
     </div>
    
     </main>
+    </div>
 
   `,
   setup() {
@@ -133,15 +140,25 @@ const App = {
     });
 
     onMounted(() => {
-      before.value = content
+      before.value = window.$CONTENT
     })
 
+    const writeFile = () => {
+      window.parent.postMessage({
+        cmd: 'writeFile',
+        data: {
+            code: before.value,    
+            jsonPath: window.$MDPATH
+        }
+      }, '*')
+    }
 
     return {
       before,
       after,
       weatherApi,
-      emojiUrls
+      emojiUrls,
+      writeFile
     };
   },
 };
@@ -150,7 +167,20 @@ Vue.use(VueCompositionApi);
 
 Vue.config.productionTip = false;
 
-new Vue({
-  el: "#app",
-  render: (h) => h(App),
-});
+window.addEventListener('message', init, false)
+function init(event) {
+    if (event.data.cmd === 'mountApp') {
+        window.$CONTENT = event.data.data // JSON内容
+        window.$MDPATH = event.data.mdPath // JSON路径
+  
+        new Vue({
+          el: "#app",
+          render: (h) => h(App),
+        });
+    }
+}
+
+// new Vue({
+//   el: "#app",
+//   render: (h) => h(App),
+// });
