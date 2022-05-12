@@ -8,7 +8,7 @@ const App = {
   template: `
     <div>
 
-    <button @click="writeFile">更新</button>
+    <button @click="writeFile">手动更新</button>
 
     <main class="container-fluid">
   
@@ -42,16 +42,13 @@ const App = {
 
 
     onMounted(() => {
-      setTimeout(() => {
         if (window.$VUE) {
           window.$VUE.$children[0].before = window.$CONTENT;
         }
-      }, 2000)
     });
 
     const writeFile = () => {
-      window.$VUE.$children[0].before = `222 @nice`;
-
+      window.$VUE.$children[0].before = window.$CONTENT;
 
       // window.parent.postMessage({
       //   cmd: 'writeFile',
@@ -86,7 +83,7 @@ const init = async (event) => {
     });
   }
 
-  if (event.data.cmd === "changeContent") {
+  if (event.data.cmd === "mdSync") {
     window.$CONTENT = event.data.data; // MD内容
     window.$MDPATH = event.data.mdPath; // MD路径
 
