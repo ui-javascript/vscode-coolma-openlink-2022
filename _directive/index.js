@@ -69,7 +69,7 @@ Vue.use(VueCompositionApi);
 Vue.config.productionTip = false;
 
 window.addEventListener('message', init, false)
-function init(event) {
+const init = async (event) => {
     if (event.data.cmd === 'mountApp') {
         window.$CONTENT = event.data.data // MD内容
         window.$MDPATH = event.data.mdPath // MD路径
@@ -84,8 +84,15 @@ function init(event) {
       window.$CONTENT = event.data.data // MD内容
       window.$MDPATH = event.data.mdPath // MD路径
 
+      
+      if (window.$VUE) {
+        window.$VUE.before.value = window.$CONTENT
 
-      window.$VUE.before.value = window.$CONTENT
+        const res = await unifiedParser(window.$CONTENT);
+        // console.log(String(res));
+        window.$VUE.after.value = String(res);
+      }
+
     }
 }
 
