@@ -8,6 +8,7 @@ const App = {
   template: `
     <div>
 
+    <button @click="writeFile">更新</button>
 
     <main class="container-fluid">
   
@@ -28,8 +29,6 @@ const App = {
     watchDebounced(
       before,
       async () => {
-        debugger;
-
         const res = await unifiedParser(before.value);
 
         console.log(String(res));
@@ -41,28 +40,32 @@ const App = {
       }
     );
 
+
     onMounted(() => {
       setTimeout(() => {
         if (window.$VUE) {
           window.$VUE.$children[0].before = window.$CONTENT;
         }
-      }, 100);
+      }, 2000)
     });
 
-    // const writeFile = () => {
-    //   window.parent.postMessage({
-    //     cmd: 'writeFile',
-    //     data: {
-    //         code: before.value,
-    //         mdPath: window.$MDPATH
-    //     }
-    //   }, '*')
-    // }
+    const writeFile = () => {
+      window.$VUE.$children[0].before = `222 @nice`;
+
+
+      // window.parent.postMessage({
+      //   cmd: 'writeFile',
+      //   data: {
+      //       code: before.value,
+      //       mdPath: window.$MDPATH
+      //   }
+      // }, '*')
+    }
 
     return {
       before,
       after,
-      // writeFile
+      writeFile
     };
   },
 };
