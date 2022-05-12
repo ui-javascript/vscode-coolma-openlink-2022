@@ -44,7 +44,7 @@ const App = {
     onMounted(() => {
       setTimeout(() => {
         if (window.$VUE) {
-          window.$VUE.$children[0].before.value = window.$CONTENT;
+          window.$VUE.$children[0].before = window.$CONTENT;
         }
       }, 100);
     });
@@ -88,7 +88,7 @@ const init = async (event) => {
     window.$MDPATH = event.data.mdPath; // MD路径
 
     if (window.$VUE) {
-      window.$VUE.$children[0].before.value = window.$CONTENT;
+      window.$VUE.$children[0].before = window.$CONTENT;
     }
   }
 };
