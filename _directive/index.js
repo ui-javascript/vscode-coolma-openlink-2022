@@ -148,7 +148,7 @@ const App = {
         cmd: 'writeFile',
         data: {
             code: before.value,    
-            jsonPath: window.$MDPATH
+            mdPath: window.$MDPATH
         }
       }, '*')
     }
