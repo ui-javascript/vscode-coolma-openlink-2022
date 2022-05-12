@@ -19,7 +19,6 @@ const App = {
   
     <div class="grid">
 
-      <textarea style="display: block;min-height: 350px" v-model="before"></textarea>
       <div v-html="after"></div>
 
     </div>
@@ -75,10 +74,18 @@ function init(event) {
         window.$CONTENT = event.data.data // MD内容
         window.$MDPATH = event.data.mdPath // MD路径
   
-        new Vue({
+        window.$VUE = new Vue({
           el: "#app",
           render: (h) => h(App),
         });
+    }
+
+    if (event.data.cmd === 'changeContent') {
+      window.$CONTENT = event.data.data // MD内容
+      window.$MDPATH = event.data.mdPath // MD路径
+
+
+      window.$VUE.before.value = window.$CONTENT
     }
 }
 
