@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueCompositionApi, { onMounted, ref } from "@vue/composition-api";
-import { watchDebounced, watchThrottled } from "@vueuse/core";
+import { watchDebounced, watchThrottled, useIntervalFn } from "@vueuse/core";
 import "./style.less";
 import unifiedParser from "./utils/unifiedParserUtil";
 
@@ -8,7 +8,12 @@ const App = {
   template: `
     <div>
 
-    <button @click="writeFile">手动更新222</button>
+    <button v-if="isActive" class="outline" @click="pause">
+      关闭自动刷新
+    </button>
+    <button v-if="!isActive" class="secondary outline" @click="resume">
+      开启自动刷新
+    </button>
 
     <main class="container-fluid">
   
@@ -40,39 +45,31 @@ const App = {
       }
     );
 
-
-    onMounted(() => {
-
+    const interval = ref(500)
+    const { pause, resume, isActive } = useIntervalFn(() => {
       before.value = window.$CONTENT;
+    }, interval)
 
-      window.addEventListener("message", init, false);
-      const init = async (event) => {
-        if (event.data.cmd === "mdSync") {
-          window.$CONTENT = event.data.data; // MD内容
-          window.$MDPATH = event.data.mdPath; // MD路径
 
-          before.value = window.$CONTENT
-        }
-      }
+    // const writeFile = () => {
+    //   before.value = window.$CONTENT;
 
-    });
-
-    const writeFile = () => {
-      before.value = window.$CONTENT;
-
-      // window.parent.postMessage({
-      //   cmd: 'writeFile',
-      //   data: {
-      //       code: before.value,
-      //       mdPath: window.$MDPATH
-      //   }
-      // }, '*')
-    }
+    //   // window.parent.postMessage({
+    //   //   cmd: 'writeFile',
+    //   //   data: {
+    //   //       code: before.value,
+    //   //       mdPath: window.$MDPATH
+    //   //   }
+    //   // }, '*')
+    // }
 
     return {
       before,
       after,
-      writeFile
+      // writeFile,
+      pause, 
+      resume, 
+      isActive
     };
   },
 };
@@ -91,6 +88,11 @@ const init = async (event) => {
       el: "#app",
       render: (h) => h(App),
     });
+  }
+
+  if (event.data.cmd === "mdSync") {
+    window.$CONTENT = event.data.data; // MD内容
+    window.$MDPATH = event.data.mdPath; // MD路径
   }
 
 };
