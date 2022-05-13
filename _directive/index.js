@@ -4,23 +4,25 @@ import { watchDebounced, watchThrottled, useIntervalFn } from "@vueuse/core";
 import "./style.less";
 import unifiedParser from "./utils/unifiedParserUtil";
 
+{/* <nav>
+<button v-if="isActive" class="outline" @click="pause">
+  自动刷新中({{interval}}ms)
+</button>
+<button v-if="!isActive" class="secondary outline" @click="resume">
+开启自动刷新
+</button>
+</nav> */}
+
 
 const App = {
   template: `
     <div>
-    <nav>
-      <button v-if="isActive" class="outline" @click="pause">
-        自动刷新中({{interval}}ms)
-      </button>
-      <button v-if="!isActive" class="secondary outline" @click="resume">
-      开启自动刷新
-      </button>
-    </nav>
-  
+
     <main class="container-fluid">
   
     <div class="grid">
 
+      <textarea style="display: block;min-height: 350px" v-model="before"></textarea>
       <div v-html="after"></div>
 
     </div>
@@ -47,11 +49,15 @@ const App = {
       }
     );
 
-    const interval = ref(500)
-    const { pause, resume, isActive } = useIntervalFn(() => {
-      console.log("定时器")
-      before.value = window.$CONTENT;
-    }, interval)
+    onMounted(() => {
+      before.value = window.$CONTENT
+    })
+
+    // const interval = ref(500)
+    // const { pause, resume, isActive } = useIntervalFn(() => {
+    //   console.log("定时器")
+    //   before.value = window.$CONTENT;
+    // }, interval)
 
 
     // const writeFile = () => {
@@ -70,10 +76,10 @@ const App = {
       before,
       after,
       // writeFile,
-      pause, 
-      resume, 
-      isActive,
-      interval
+      // pause, 
+      // resume, 
+      // isActive,
+      // interval
     };
   },
 };
@@ -85,8 +91,8 @@ Vue.config.productionTip = false;
 window.addEventListener("message", init, false);
 const init = async (event) => {
 
-  console.log(JSON.stringify(event))
-  alert(JSON.stringify(event))
+  // console.log(JSON.stringify(event))
+  // alert(JSON.stringify(event))
 
   if (event.data.cmd === "mountApp") {
     window.$CONTENT = event.data.data; // MD内容
@@ -96,7 +102,6 @@ const init = async (event) => {
       el: "#app",
       render: (h) => h(App),
     });
-  
   }
 
   if (event.data.cmd === "mdSync" || event.data.cmd === "changeContent") {
@@ -106,7 +111,7 @@ const init = async (event) => {
 
 };
 
-window.$VUE = new Vue({
-  el: "#app",
-  render: (h) => h(App),
-});
+// window.$VUE = new Vue({
+//   el: "#app",
+//   render: (h) => h(App),
+// });
