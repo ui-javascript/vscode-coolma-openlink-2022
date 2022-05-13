@@ -12,10 +12,10 @@ const App = {
 
     <nav>
       <button v-if="isActive" class="outline" @click="pause">
-        自动刷新中({{interval}}ms)
+        MD自动预览中（{{interval}}ms）
       </button>
       <button v-if="!isActive" class="secondary outline" @click="resume">
-      开启自动刷新
+        开启MD自动预览
       </button>
     </nav> 
 
@@ -24,7 +24,7 @@ const App = {
   
     <div class="grid">
 
-      <textarea style="display: block;min-height: 350px" v-model="before"></textarea>
+      <textarea v-if="!isActive" style="display: block;min-height: 350px" v-model="before"></textarea>
       <div v-html="after"></div>
 
     </div>
