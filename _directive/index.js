@@ -9,7 +9,7 @@ const App = {
   template: `
     <div>
     <nav>
-      <button v-if="isActive" class="outline" @click="pause">
+      <button v-if="isActive" aria-busy="true" class="outline" @click="pause">
       自动刷新中({{interval}}ms)
       </button>
       <button v-if="!isActive" class="secondary outline" @click="resume">
