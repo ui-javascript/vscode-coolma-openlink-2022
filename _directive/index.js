@@ -49,6 +49,7 @@ const App = {
 
     const interval = ref(500)
     const { pause, resume, isActive } = useIntervalFn(() => {
+      console.log("定时器")
       before.value = window.$CONTENT;
     }, interval)
 
