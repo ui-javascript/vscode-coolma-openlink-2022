@@ -25,7 +25,7 @@ const App = {
     const before = ref("");
     const after = ref("");
 
-    // 防抖已交给vscode插件实现
+    // 节流防抖已交给vscode插件实现
     watchEffect(async () => {
         const res = await unifiedParser(before.value);
         console.log(String(res));
