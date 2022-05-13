@@ -4,19 +4,21 @@ import { watchDebounced, watchThrottled, useIntervalFn } from "@vueuse/core";
 import "./style.less";
 import unifiedParser from "./utils/unifiedParserUtil";
 
-{/* <nav>
-<button v-if="isActive" class="outline" @click="pause">
-  自动刷新中({{interval}}ms)
-</button>
-<button v-if="!isActive" class="secondary outline" @click="resume">
-开启自动刷新
-</button>
-</nav> */}
 
 
 const App = {
   template: `
     <div>
+
+    <nav>
+      <button v-if="isActive" class="outline" @click="pause">
+        自动刷新中({{interval}}ms)
+      </button>
+      <button v-if="!isActive" class="secondary outline" @click="resume">
+      开启自动刷新
+      </button>
+    </nav> 
+
 
     <main class="container-fluid">
   
@@ -53,33 +55,32 @@ const App = {
       before.value = window.$CONTENT
     })
 
-    // const interval = ref(500)
-    // const { pause, resume, isActive } = useIntervalFn(() => {
-    //   console.log("定时器")
-    //   before.value = window.$CONTENT;
-    // }, interval)
+    const interval = ref(500)
+    const { pause, resume, isActive } = useIntervalFn(() => {
+      console.log("定时器")
+      before.value = window.$CONTENT;
+    }, interval)
 
 
-    // const writeFile = () => {
-    //   before.value = window.$CONTENT;
+    const writeFile = () => {
 
-    //   // window.parent.postMessage({
-    //   //   cmd: 'writeFile',
-    //   //   data: {
-    //   //       code: before.value,
-    //   //       mdPath: window.$MDPATH
-    //   //   }
-    //   // }, '*')
-    // }
+      window.parent.postMessage({
+        cmd: 'writeFile',
+        data: {
+            code: before.value,
+            mdPath: window.$MDPATH
+        }
+      }, '*')
+    }
 
     return {
       before,
       after,
-      // writeFile,
-      // pause, 
-      // resume, 
-      // isActive,
-      // interval
+      writeFile,
+      pause, 
+      resume, 
+      isActive,
+      interval
     };
   },
 };
@@ -111,7 +112,7 @@ const init = async (event) => {
 
 };
 
-// window.$VUE = new Vue({
-//   el: "#app",
-//   render: (h) => h(App),
-// });
+window.$VUE = new Vue({
+  el: "#app",
+  render: (h) => h(App),
+});
