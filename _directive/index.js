@@ -10,10 +10,7 @@ const App = {
     <div>
     <nav>
       <button v-if="isActive" class="secondary outline" @click="pause">
-      关闭自动刷新
-      </button>
-      <button v-if="!isActive" class="outline" @click="resume">
-        开启自动刷新
+      自动刷新中({{interval}}s)
       </button>
     </nav>
   
@@ -49,9 +46,7 @@ const App = {
 
     const interval = ref(500)
     const { pause, resume, isActive } = useIntervalFn(() => {
-      
       before.value = window.$CONTENT;
-
     }, interval)
 
 
@@ -73,7 +68,8 @@ const App = {
       // writeFile,
       pause, 
       resume, 
-      isActive
+      isActive,
+      interval
     };
   },
 };
@@ -89,21 +85,21 @@ const init = async (event) => {
     window.$CONTENT = event.data.data; // MD内容
     window.$MDPATH = event.data.mdPath; // MD路径
 
-    // window.$VUE = new Vue({
-    //   el: "#app",
-    //   render: (h) => h(App),
-    // });
+    window.$VUE = new Vue({
+      el: "#app",
+      render: (h) => h(App),
+    });
   
   }
 
-  if (event.data.cmd === "mdSync") {
+  if (event.data.cmd === "mdSync" || event.data.cmd === "changeContent") {
     window.$CONTENT = event.data.data; // MD内容
     window.$MDPATH = event.data.mdPath; // MD路径
   }
 
 };
 
-window.$VUE = new Vue({
-  el: "#app",
-  render: (h) => h(App),
-});
+// window.$VUE = new Vue({
+//   el: "#app",
+//   render: (h) => h(App),
+// });
