@@ -89,10 +89,10 @@ const init = async (event) => {
     window.$CONTENT = event.data.data; // MD内容
     window.$MDPATH = event.data.mdPath; // MD路径
 
-    window.$VUE = new Vue({
-      el: "#app",
-      render: (h) => h(App),
-    });
+    // window.$VUE = new Vue({
+    //   el: "#app",
+    //   render: (h) => h(App),
+    // });
   
   }
 
@@ -103,7 +103,7 @@ const init = async (event) => {
 
 };
 
-// window.$VUE = new Vue({
-//   el: "#app",
-//   render: (h) => h(App),
-// });
+window.$VUE = new Vue({
+  el: "#app",
+  render: (h) => h(App),
+});
