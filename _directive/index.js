@@ -84,6 +84,9 @@ Vue.config.productionTip = false;
 window.addEventListener("message", init, false);
 const init = async (event) => {
 
+  console.log(JSON.stringify(event))
+  alert(JSON.stringify(event))
+
   if (event.data.cmd === "mountApp") {
     window.$CONTENT = event.data.data; // MD内容
     window.$MDPATH = event.data.mdPath; // MD路径
@@ -102,7 +105,7 @@ const init = async (event) => {
 
 };
 
-// window.$VUE = new Vue({
-//   el: "#app",
-//   render: (h) => h(App),
-// });
+window.$VUE = new Vue({
+  el: "#app",
+  render: (h) => h(App),
+});
