@@ -12,10 +12,10 @@ const App = {
 
     <nav>
       <button v-if="isActive" class="outline" @click="pause">
-        MD自动预览中（{{interval}}ms）
+        本地MD文件 自动预览中（{{interval}}ms）
       </button>
       <button v-if="!isActive" class="secondary outline" @click="resume">
-        开启MD自动预览
+        开启 本地MD文件 自动预览
       </button>
     </nav> 
 
@@ -24,8 +24,8 @@ const App = {
   
     <div class="grid">
 
-      <textarea v-if="!isActive" style="display: block;min-height: 350px" v-model="before"></textarea>
-      <div v-html="after"></div>
+      <textarea v-if="!isActive" style="display: block;height: 700px" v-model="before"></textarea>
+      <div style="min-height: 700px" v-html="after"></div>
 
     </div>
    
@@ -57,9 +57,11 @@ const App = {
 
     const interval = ref(500)
     const { pause, resume, isActive } = useIntervalFn(() => {
-      console.log("定时器")
+      // console.log("定时器")
       before.value = window.$CONTENT;
-    }, interval)
+    }, interval, {
+      immediate: false
+    })
 
 
     const writeFile = () => {
